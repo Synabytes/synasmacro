@@ -1,4 +1,6 @@
-﻿ConfigFile := "config.txt"
+#MaxThreadsPerHotkey 2
+
+ConfigFile := "config.txt"
 SavedHotkey := ""
 DebounceTime := 10
 MacroVersion := "FirstPerson"
@@ -102,9 +104,6 @@ SetDebounce:
         GuiControl,, CurrentDebounceText, % "Debounce Time: " NewDebounce " ms"
 
         DebounceTime := NewDebounce
-        if (MacroActive) {
-            SetTimer, RunMacro, %DebounceTime%
-        }
     }
 return
 
@@ -123,27 +122,25 @@ SwitchVersion:
     GuiControl,, CurrentVersionText, % "Macro Version: " MacroVersion
 return
 
-MacroActive := false
+Toggle := false
 
 ToggleMacro:
-    MacroActive := !MacroActive
-
-    if (MacroActive) {
-        SetTimer, RunMacro, %DebounceTime%
-    } else {
-        SetTimer, RunMacro, Off
-    }
+    Toggle := !Toggle
+    if (Toggle)
+        SetTimer, MacroLoop, %DebounceTime%
+    else
+        SetTimer, MacroLoop, Off
 return
 
-RunMacro:
+MacroLoop:
     if (MacroVersion = "FirstPerson") {
-        Send, {WheelUp}
+        Send, {Blind}{WheelUp}
         Sleep, 10
-        Send, {WheelDown}
+        Send, {Blind}{WheelDown}
     } else if (MacroVersion = "ThirdPerson") {
-        Send, i
+        Send, {Blind}i
         Sleep, %DebounceTime%
-        Send, o
+        Send, {Blind}o
     }
 return
 
