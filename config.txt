@@ -1,0 +1,3 @@
+hotkey=q
+debounce=10
+version=ThirdPerson
